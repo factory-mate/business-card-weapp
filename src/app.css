@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+
+@plugin "@iconify/tailwind4" {
+  prefixes: mdi;
+  icon-selector: '.i-{prefix}-{name}';
+}
+
+@source "./**/*.{wxml,js,ts,vue}";
+
+page {
+  font-family: 'HarmonyOS Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background-color: #f6f7fb;
+}
