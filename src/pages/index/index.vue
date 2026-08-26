@@ -1,34 +1,22 @@
 <script setup lang="ts">
-import { onMounted, onReady, onShareAppMessage, onShow, ref } from 'wevu'
+import { useUserStore } from '@/stores'
+import { onShareAppMessage, onShow } from 'wevu'
 
 definePageJson({
   navigationBarTitleText: '名片'
 })
 
-const shareImgUrl = ref('')
-
-const info = ref({
-  companySrc:
-    'https://mdwipnyhqileocalrcsw.supabase.co/storage/v1/object/public/business-card/company.webp',
-  companyName: '上海沂庆贸易有限公司',
-  userName: '袁红霞',
-  position: '总经理',
-  desc: '专业从事化学品原料贸易的外商投资企业\n专业的化学品解决方案提供者',
-  phone: '13761299108',
-  email: 'service@achemc.com.cn',
-  location: '上海市长宁区金钟路968号6号楼902室',
-  wechat: 'Bruce_Song_0920'
-})
+const { info, getInfo } = useUserStore()
 
 const saveContact = () =>
   wx.addPhoneContact({
-    firstName: info.value.userName,
-    mobilePhoneNumber: info.value.phone,
-    organization: info.value.companyName,
-    title: info.value.position,
-    email: info.value.email,
-    workAddressStreet: info.value.location,
-    weChatNumber: info.value.wechat,
+    firstName: info.value.cEmployeeName ?? '',
+    mobilePhoneNumber: info.value.cPhone,
+    organization: info.value.cCompanyName,
+    title: info.value.cPost,
+    email: info.value.cEmail,
+    workAddressStreet: info.value.cAddress,
+    weChatNumber: info.value.cWeName,
     success: () =>
       wx.showToast({
         title: '保存成功',
@@ -36,122 +24,59 @@ const saveContact = () =>
       })
   })
 
-const makeCall = () =>
+const makeCall = () => {
+  if (!info.value.cPhone) {
+    wx.showToast({ title: '暂未提供联系电话', icon: 'error' })
+    return
+  }
   wx.makePhoneCall({
-    phoneNumber: info.value.phone
+    phoneNumber: info.value.cPhone
   })
+}
 
-const copyWeChat = () =>
+const copyWeChat = () => {
+  if (!info.value.cWeName) {
+    wx.showToast({ title: '暂未提供联系微信号', icon: 'error' })
+    return
+  }
   wx.setClipboardData({
-    data: info.value.wechat,
+    data: info.value.cWeName,
     success: () => {
       wx.showModal({
         title: '微信号已复制',
-        content: `已成功复制微信号: ${info.value.wechat}\n请在微信搜索框中粘贴并添加好友`,
+        content: `已成功复制微信号: ${info.value.cWeName}\n请在微信搜索框中粘贴并添加好友`,
         showCancel: false
       })
     }
   })
+}
 
-const openMap = () =>
+const openMap = () => {
+  if (!info.value.cAddress) {
+    wx.showToast({ title: '暂未提供地址', icon: 'error' })
+    return
+  }
   wx.openLocation({
     latitude: 31.22114,
     longitude: 121.35339,
-    name: info.value.companyName,
-    address: info.value.location
-  })
-
-const createSharePoster = async (): Promise<string> => {
-  const SHARE_W = 750
-  const SHARE_H = 600
-  return new Promise((resolve) => {
-    const query = wx.createSelectorQuery()
-
-    query
-      .select('#shareCanvas')
-      .fields({ node: true })
-      .exec(async (res) => {
-        const canvas = res[0].node
-        const ctx = canvas.getContext('2d')
-
-        canvas.width = SHARE_W
-        canvas.height = SHARE_H
-
-        const bgImg = canvas.createImage()
-        bgImg.src =
-          'https://mdwipnyhqileocalrcsw.supabase.co/storage/v1/object/public/business-card/card_bg.jpg'
-
-        await new Promise((r) => {
-          bgImg.onload = r
-        })
-
-        ctx.drawImage(bgImg, 0, 0, SHARE_W, SHARE_H)
-
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.35)'
-        ctx.fillRect(0, 0, SHARE_W, SHARE_H)
-
-        ctx.fillStyle = '#111827'
-        ctx.font = 'bold 36px sans-serif'
-        ctx.fillText(info.value.companyName, 80, 86)
-
-        ctx.font = 'bold 48px sans-serif'
-        ctx.fillText(info.value.userName, 80, 210)
-
-        ctx.font = '28px sans-serif'
-        ctx.fillStyle = '#6b7280'
-        ctx.fillText(info.value.position, 80, 258)
-
-        const descLines = info.value.desc.split('\n')
-        descLines.forEach((line, index) => {
-          ctx.fillText(line, 420, 210 + index * 36)
-        })
-
-        ctx.font = '26px sans-serif'
-        ctx.fillStyle = '#374151'
-
-        const contactY = 340
-        const lineHeight = 42
-
-        ctx.fillText(`电话：${info.value.phone}`, 80, contactY)
-        ctx.fillText(`邮箱：${info.value.email}`, 80, contactY + lineHeight)
-        ctx.fillText(`地址：${info.value.location}`, 80, contactY + lineHeight * 2)
-
-        console.log('canvas', canvas)
-
-        wx.canvasToTempFilePath({
-          canvas: canvas,
-          x: 0,
-          y: 0,
-          width: SHARE_W,
-          height: SHARE_H,
-          destWidth: SHARE_W,
-          destHeight: SHARE_H,
-          fileType: 'jpg',
-          quality: 0.8,
-          success: (r: any) => resolve(r.tempFilePath)
-        })
-      })
+    name: info.value.cCompanyName,
+    address: info.value.cAddress
   })
 }
 
 onShareAppMessage(() => ({
-  title: `${info.value.userName}的名片`,
-  path: '/pages/index/index',
-  imageUrl: shareImgUrl.value
+  title: `${info.value.cEmployeeName}的名片`,
+  path: '/pages/index/index'
 }))
 
-onShow(() =>
-  wx.setNavigationBarTitle({
-    title: `${info.value.userName}的名片`
-  })
-)
-
-onMounted(async () => {
-  try {
-    const tempPath = await createSharePoster()
-    shareImgUrl.value = tempPath
-  } catch (e) {
-    console.error('生成分享海报失败', e)
+onShow(async () => {
+  const token = wx.getStorageSync('token')
+  const user = wx.getStorageSync('user')
+  if (token) {
+    await getInfo(user.UserId)
+    wx.setNavigationBarTitle({
+      title: `${info.value.cEmployeeName}的名片`
+    })
   }
 })
 </script>
@@ -167,23 +92,33 @@ onMounted(async () => {
       <view class="flex items-center">
         <image
           class="h-[64rpx] w-[64rpx]"
-          :src="info.companySrc"
+          :src="info.cLogoUrl"
         />
-        <text class="ml-1">{{ info.companyName }}</text>
+        <text class="ml-1">{{ info.cCompanyName }}</text>
       </view>
       <view class="my-[50rpx] flex items-center justify-between">
-        <view class="flex flex-col items-center">
-          <text class="text-2xl font-bold">{{ info.userName }}</text>
-          <text class="text-sm">{{ info.position }}</text>
+        <view class="flex flex-col items-center shrink-0">
+          <text class="text-2xl font-bold">{{ info.cEmployeeName }}</text>
+          <text
+            v-if="info.cPost"
+            class="text-sm text-center"
+          >
+            {{ info.cPost }}
+          </text>
         </view>
-        <view class="whitespace-pre-line text-center text-xs">
-          <text>{{ info.desc }}</text>
+        <view class="whitespace-pre-line text-center text-xs flex flex-col items-center">
+          <text
+            v-for="(t, index) in info.desc"
+            :key="index"
+          >
+            {{ t ?? '' }}
+          </text>
         </view>
       </view>
       <view class="flex flex-col space-y-1 text-xs">
-        <text>电话：{{ info.phone }}</text>
-        <text>邮箱：{{ info.email }}</text>
-        <text>地址：{{ info.location }}</text>
+        <text v-if="info.cPhone">电话：{{ info.cPhone }}</text>
+        <text v-if="info.cEmail">邮箱：{{ info.cEmail }}</text>
+        <text v-if="info.cAddress">地址：{{ info.cAddress }}</text>
       </view>
     </view>
 
@@ -261,9 +196,4 @@ onMounted(async () => {
       </view>
     </view>
   </view>
-  <!-- <canvas
-    type="2d"
-    id="shareCanvas"
-    style="width: 750px; height: 600px; position: fixed; left: -9999rpx; top: -9999rpx"
-  /> -->
 </template>
