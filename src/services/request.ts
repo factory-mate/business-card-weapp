@@ -5,6 +5,7 @@ interface Response<T = any> {
   errmsg: any
 }
 
+export const ADMIN_API_DOMAIN_PREFIX = 'https://huiyoucloud.com:8888'
 export const API_DOMAIN_PREFIX = 'https://huiyoucloud.com:8087'
 
 export async function request<T>(options: WechatMiniprogram.RequestOption) {

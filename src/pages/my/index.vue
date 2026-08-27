@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AuthAPI } from '@/services'
-import { useUserStore } from '@/stores'
+import { useUserDetailStore, useCardListStore } from '@/stores'
 import { onShow, ref } from 'wevu'
 
 definePageJson({
@@ -10,14 +10,19 @@ definePageJson({
 const isLogin = ref(false)
 const version = ref('')
 
-const { info, getInfo } = useUserStore()
+const { detail, getDetail } = useUserDetailStore()
+const { setCurrentId, addCardItem } = useCardListStore()
+
+const getUserDetail = () => {
+  const user = wx.getStorageSync('user')
+  getDetail(user.UserId)
+}
 
 const handleLogin = async (e: any) => {
   if (e.detail.errMsg !== 'getPhoneNumber:ok') {
     wx.showToast({ title: '已取消授权', icon: 'none' })
     return
   }
-  console.log(e)
   const phoneCode = e.detail.code
   wx.showLoading({ title: '加载中' })
   try {
@@ -26,21 +31,31 @@ const handleLogin = async (e: any) => {
       js_code,
       phoneCode
     })
+    const userId = data.token_user.UserId
+    wx.hideLoading()
     wx.setStorageSync('token', data.token)
     wx.setStorageSync('user', data.token_user)
+    setCurrentId(userId)
+    addCardItem(userId)
     isLogin.value = true
+    wx.showToast({ title: '登录成功', icon: 'success' })
+    getUserDetail()
   } catch {
-    //
+    wx.hideLoading()
+    return
   }
-  wx.showToast({ title: '登录成功', icon: 'success' })
   wx.hideLoading()
 }
 
-const navToPrivacy = () => {
+const navToCardList = () =>
+  wx.navigateTo({
+    url: '/pages/my/card-list/index'
+  })
+
+const navToPrivacy = () =>
   wx.navigateTo({
     url: '/pages/my/privacy/index'
   })
-}
 
 const handleLogout = () => {
   isLogin.value = false
@@ -48,18 +63,21 @@ const handleLogout = () => {
   wx.removeStorageSync('user')
 }
 
-onShow(() => {
-  const token = wx.getStorageSync('token')
-  const user = wx.getStorageSync('user')
-  isLogin.value = !!token
+const setVersionInfo = () => {
   if (wx.getAccountInfoSync().miniProgram.version) {
     version.value = `v${wx.getAccountInfoSync().miniProgram.version!}`
   } else {
     version.value = 'v0.0.1'
   }
+}
+
+onShow(() => {
+  const token = wx.getStorageSync('token')
+  isLogin.value = !!token
   if (isLogin.value) {
-    getInfo(user.UserId)
+    getUserDetail()
   }
+  setVersionInfo()
 })
 </script>
 
@@ -70,10 +88,10 @@ onShow(() => {
       class="flex items-center space-x-2 mb-4"
     >
       <t-avatar
-        :image="info.cUrl"
+        :image="detail.cUrl"
         size="large"
       />
-      <text class="text-[48rpx]">{{ info.cEmployeeName }}</text>
+      <text class="text-[48rpx]">{{ detail.cEmployeeName }}</text>
     </view>
     <view>
       <t-cell-group
@@ -100,6 +118,7 @@ onShow(() => {
           leftIcon="verify"
           hover
           arrow
+          @tap="navToCardList"
         />
         <t-cell
           title="隐私政策"

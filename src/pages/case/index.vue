@@ -1,29 +1,22 @@
 <script setup lang="ts">
-import { ref } from 'wevu'
+import { useCaseListStore } from '@/stores'
+import { getFileUrl } from '@/utils'
+import { onShow } from 'wevu'
 
 definePageJson({
   navigationBarTitleText: '案例'
 })
 
-const listData = ref([
-  {
-    title: '启超业绩',
-    src: 'https://mdwipnyhqileocalrcsw.supabase.co/storage/v1/object/public/business-card/case1.png'
-  },
-  {
-    title: '启超合作伙伴',
-    src: 'https://mdwipnyhqileocalrcsw.supabase.co/storage/v1/object/public/business-card/case2.png'
-  },
-  {
-    title: '案例展示',
-    src: 'https://mdwipnyhqileocalrcsw.supabase.co/storage/v1/object/public/business-card/case3.png'
-  }
-])
+const { listData, getList } = useCaseListStore()
 
 const navToDetail = (id: string) =>
   wx.navigateTo({
     url: `/pages/case/detail/index?id=${id}`
   })
+
+onShow(() => {
+  getList()
+})
 </script>
 
 <template>
@@ -35,13 +28,13 @@ const navToDetail = (id: string) =>
     >
       <view
         class="flex flex-col"
-        @tap="navToDetail(item.title)"
+        @tap="navToDetail(item.UID)"
       >
-        <text class="text-sm">{{ item.title }}</text>
+        <text class="text-sm">{{ item.cTitle }}</text>
         <image
           class="mt-4 w-full"
           mode="widthFix"
-          :src="item.src"
+          :src="item.list_file?.[0] && (getFileUrl(item.list_file[0]) ?? '')"
         />
       </view>
     </view>

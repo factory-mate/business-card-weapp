@@ -3,7 +3,7 @@ import { API_DOMAIN_PREFIX, request } from './request'
 const API_PREFIX = '/api/sys_user'
 
 export const UserAPI = {
-  getById: (val: string) =>
+  detail: (val: string) =>
     request<UserVo>({
       url: `${API_DOMAIN_PREFIX}${API_PREFIX}/GetById`,
       method: 'GET',
@@ -15,6 +15,9 @@ export const UserAPI = {
 
 export interface UserVo {
   desc: string[]
+  cLatitude: number
+  cLongitude: number
+  cBgUrl: string
   cUrl: string
   cCompanyIntroduce: string
   cAddress: string

@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { onLaunch } from 'wevu'
+import { useCardListStore } from './stores'
+
+const { cardList, resetCardList, initCardList } = useCardListStore()
+
 defineAppJson({
   pages: [
     'pages/index/index',
@@ -7,7 +12,8 @@ defineAppJson({
     'pages/case/index',
     'pages/case/detail/index',
     'pages/my/index',
-    'pages/my/privacy/index'
+    'pages/my/privacy/index',
+    'pages/my/card-list/index'
   ],
   window: {
     navigationBarTitleText: '慧友名片',
@@ -50,6 +56,14 @@ defineAppJson({
       }
     ]
   }
+})
+
+onLaunch(async () => {
+  const currentId = wx.getStorageSync('current-id')
+  if (!cardList.value.length || !currentId) {
+    await resetCardList()
+  }
+  initCardList()
 })
 </script>
 
