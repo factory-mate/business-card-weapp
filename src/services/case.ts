@@ -1,12 +1,14 @@
 import type { FileVo } from './file'
+import type { FullPageDto } from './page'
 import { API_DOMAIN_PREFIX, request } from './request'
 const API_PREFIX = '/api/fm_case'
 
 export const CaseAPI = {
-  list: () =>
+  list: (data: FullPageDto) =>
     request<CaseVo[]>({
       url: `${API_DOMAIN_PREFIX}${API_PREFIX}/GetForList`,
-      method: 'GET'
+      method: 'GET',
+      data
     }),
   detail: (val: string) =>
     request<CaseVo>({

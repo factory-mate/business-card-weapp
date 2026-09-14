@@ -1,12 +1,15 @@
 import { UserAPI, type UserVo } from '@/services'
 import { defineStore, ref } from 'wevu'
 
-export const useUserDetailStore = defineStore('user-detail', () => {
+export const useCurrentCardStore = defineStore('current-card', () => {
   const detail = ref<Partial<UserVo>>({})
+
+  const currentId = ref<string>('')
 
   const isLoading = ref(false)
 
   async function getDetail(id: string) {
+    detail.value = {}
     isLoading.value = true
     wx.showLoading({ title: '正在加载数据' })
     try {
@@ -19,5 +22,16 @@ export const useUserDetailStore = defineStore('user-detail', () => {
     isLoading.value = false
   }
 
-  return { isLoading, detail, getDetail }
+  const setCurrentId = (id: string) => {
+    currentId.value = id
+    wx.setStorageSync('current-id', id)
+  }
+
+  return {
+    isLoading,
+    detail,
+    currentId,
+    getDetail,
+    setCurrentId
+  }
 })

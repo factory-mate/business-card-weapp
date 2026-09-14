@@ -1,4 +1,4 @@
-import { CaseAPI, type CaseVo } from '@/services'
+import { CaseAPI, type CaseVo, type FullPageDto } from '@/services'
 import { defineStore, ref } from 'wevu'
 
 export const useCaseListStore = defineStore('case-list', () => {
@@ -6,11 +6,12 @@ export const useCaseListStore = defineStore('case-list', () => {
 
   const isLoading = ref(false)
 
-  async function getList() {
+  async function getList(params: FullPageDto) {
+    listData.value = []
     isLoading.value = true
     wx.showLoading({ title: '正在加载数据' })
     try {
-      const { data } = await CaseAPI.list()
+      const { data } = await CaseAPI.list(params)
       listData.value = [...data]
     } catch {
       //

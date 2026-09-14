@@ -1,4 +1,4 @@
-import { ProductAPI, type ProductVo } from '@/services'
+import { ProductAPI, type FullPageDto, type ProductVo } from '@/services'
 import { defineStore, ref } from 'wevu'
 
 export const useProductListStore = defineStore('product-list', () => {
@@ -6,11 +6,12 @@ export const useProductListStore = defineStore('product-list', () => {
 
   const isLoading = ref(false)
 
-  async function getList() {
+  async function getList(params: FullPageDto) {
+    listData.value = []
     isLoading.value = true
     wx.showLoading({ title: '正在加载数据' })
     try {
-      const { data } = await ProductAPI.list()
+      const { data } = await ProductAPI.list(params)
       listData.value = [...data]
     } catch {
       //

@@ -14,7 +14,6 @@ export const UserAPI = {
 }
 
 export interface UserVo {
-  desc: string[]
   cLatitude: number
   cLongitude: number
   cBgUrl: string
@@ -48,5 +47,15 @@ export interface UserVo {
   cModifyUserCode: string
   cModifyUserName: string
   dModifyTime: string
+  cWebsiteUrl: string
+  list_s: HomePageItemVo[]
   utfs: string
+}
+
+interface HomePageItemVo {
+  cTitle: string
+  cDescription: string
+  cImgUrl: string
+  iIndex: number
+  IsValid: boolean
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AuthAPI } from '@/services'
-import { useUserDetailStore, useCardListStore } from '@/stores'
+import { useUserDetailStore, useCardListStore, useCurrentCardStore } from '@/stores'
 import { onShow, ref } from 'wevu'
 
 definePageJson({
@@ -11,12 +11,10 @@ const isLogin = ref(false)
 const version = ref('')
 
 const { detail, getDetail } = useUserDetailStore()
-const { setCurrentId, addCardItem } = useCardListStore()
+const { addCardItem } = useCardListStore()
+const { setCurrentId } = useCurrentCardStore()
 
-const getUserDetail = () => {
-  const user = wx.getStorageSync('user')
-  getDetail(user.UserId)
-}
+const getUserDetail = () => getDetail(wx.getStorageSync('user').UserId)
 
 const handleLogin = async (e: any) => {
   if (e.detail.errMsg !== 'getPhoneNumber:ok') {

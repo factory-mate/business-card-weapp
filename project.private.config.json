@@ -11,6 +11,27 @@
     "miniprogram": {
       "list": [
         {
+          "name": "pages/case/detail/index",
+          "pathName": "pages/case/detail/index",
+          "query": "id=5c410656-a223-47c0-b54c-a2f71f92c077",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
+          "name": "pages/index/index",
+          "pathName": "pages/index/index",
+          "query": "id=b5669b15-da1c-477c-8f9c-c048a3ce3f6a",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/my/card-list/index",
+          "pathName": "pages/my/card-list/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "首页",
           "pathName": "pages/index/index",
           "query": "",

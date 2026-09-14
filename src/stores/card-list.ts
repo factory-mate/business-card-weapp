@@ -5,8 +5,6 @@ import { defineStore, ref } from 'wevu'
 export const useCardListStore = defineStore('card-list', () => {
   const cardList = ref<UserVo[]>([])
 
-  const currentId = ref<string>('')
-
   const resetCardList = async () => {
     cardList.value = []
     try {
@@ -14,14 +12,10 @@ export const useCardListStore = defineStore('card-list', () => {
       cardList.value.push(data)
       wx.setStorageSync('card-list', JSON.stringify(cardList.value))
       wx.setStorageSync('current-id', data.UID)
+      return data
     } catch {
       //
     }
-  }
-
-  const initCardList = () => {
-    cardList.value = JSON.parse(wx.getStorageSync('card-list'))
-    currentId.value = wx.getStorageSync('current-id')
   }
 
   const addCardItem = async (id: string) => {
@@ -30,7 +24,7 @@ export const useCardListStore = defineStore('card-list', () => {
     }
     try {
       const { data } = await UserAPI.detail(id)
-      cardList.value.unshift(data)
+      cardList.value = [data, ...cardList.value]
       wx.setStorageSync('card-list', JSON.stringify(cardList.value))
     } catch {
       //
@@ -42,18 +36,10 @@ export const useCardListStore = defineStore('card-list', () => {
     wx.setStorageSync('card-list', JSON.stringify(cardList.value))
   }
 
-  const setCurrentId = (id: string) => {
-    currentId.value = id
-    wx.setStorageSync('current-id', id)
-  }
-
   return {
     cardList,
-    currentId,
     resetCardList,
     addCardItem,
-    removeCardItem,
-    initCardList,
-    setCurrentId
+    removeCardItem
   }
 })

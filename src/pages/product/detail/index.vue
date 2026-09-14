@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import { useProductDetailStore } from '@/stores'
+import { useCurrentCardStore, useProductDetailStore } from '@/stores'
 import { getFileUrl } from '@/utils'
-import { onLoad } from 'wevu'
+import { onLoad, onShareAppMessage, onShow } from 'wevu'
 
 definePageJson({
   navigationBarTitleText: '产品详情'
 })
 
-onLoad((query) => {
-  getDetail(query.id!)
-})
-
+const currentCardStore = useCurrentCardStore()
 const { detail, getDetail } = useProductDetailStore()
 
 const previewImage = ({ index }: { index: number }) => {
@@ -20,11 +17,17 @@ const previewImage = ({ index }: { index: number }) => {
 
   const urls = detail.value.list_file.map((i) => getFileUrl(i) ?? '')
 
-  wx.previewImage({
-    current: urls.at(index),
-    urls
-  })
+  wx.previewImage({ current: urls.at(index), urls })
 }
+
+onLoad((query) => getDetail(query.id!))
+
+onShow(() => currentCardStore.getDetail(currentCardStore.currentId.value))
+
+onShareAppMessage(() => ({
+  title: `${detail.value.cTitle}`,
+  path: `/pages/product/detail/index?id=${currentCardStore.currentId.value}`
+}))
 </script>
 
 <template>
@@ -45,5 +48,7 @@ const previewImage = ({ index }: { index: number }) => {
       </view> -->
       <text class="text-xs mt-2">{{ detail.cProfile }}</text>
     </view>
+
+    <share-area />
   </view>
 </template>
