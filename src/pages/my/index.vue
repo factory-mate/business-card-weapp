@@ -89,7 +89,7 @@ onShow(() => {
         :image="detail.cUrl"
         size="large"
       />
-      <text class="text-[48rpx]">{{ detail.cEmployeeName }}</text>
+      <text class="text-[48rpx]">{{ detail.cEmployeeName ?? '' }}</text>
     </view>
     <view>
       <t-cell-group

@@ -42,17 +42,17 @@ const props = withDefaults(
         :src="detail.cLogoUrl"
       />
       <text class="ml-1">
-        {{ detail.cCompanyName }}
+        {{ detail.cCompanyName ?? '' }}
       </text>
     </view>
     <view class="my-[50rpx] flex items-center justify-between">
       <view class="flex flex-col items-center shrink-0">
-        <text class="text-2xl font-bold">{{ detail.cEmployeeName }}</text>
+        <text class="text-2xl font-bold">{{ detail.cEmployeeName ?? '' }}</text>
         <text
           v-if="detail.cPost"
           class="text-sm text-center"
         >
-          {{ detail.cPost }}
+          {{ detail.cPost ?? '' }}
         </text>
       </view>
       <view class="whitespace-pre-line text-center text-xs flex flex-col items-center">
@@ -65,9 +65,9 @@ const props = withDefaults(
       </view>
     </view>
     <view class="flex flex-col space-y-1 text-xs">
-      <text v-if="detail.cPhone">电话：{{ detail.cPhone }}</text>
-      <text v-if="detail.cEmail">邮箱：{{ detail.cEmail }}</text>
-      <text v-if="detail.cAddress">地址：{{ detail.cAddress }}</text>
+      <text v-if="detail.cPhone">电话：{{ detail.cPhone ?? '' }}</text>
+      <text v-if="detail.cEmail">邮箱：{{ detail.cEmail ?? '' }}</text>
+      <text v-if="detail.cAddress">地址：{{ detail.cAddress ?? '' }}</text>
     </view>
   </view>
 </template>

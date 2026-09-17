@@ -85,15 +85,19 @@ onShareAppMessage((res) => {
   }
 })
 
-onLoad((options) => {
-  if (options?.id) {
-    currentCardStore.setCurrentId(options.id)
-    cardListStore.addCardItem(options.id)
+onLoad((query) => {
+  if (query?.id) {
+    currentCardStore.setCurrentId(query.id)
+    cardListStore.addCardItem(query.id)
   }
 })
 
-onShow(() => {
-  currentCardStore.getDetail(currentCardStore.currentId.value)
+onShow(async () => {
+  try {
+    await currentCardStore.getDetail(currentCardStore.currentId.value)
+  } catch {
+    //
+  }
   wx.setNavigationBarTitle({
     title: detail.value.cEmployeeName ? `${detail.value.cEmployeeName}的名片` : '名片'
   })
@@ -168,12 +172,12 @@ onShow(() => {
     >
       <view class="flex justify-center mb-2 w-full">
         <view class="relative inline-block pb-[8rpx] text-center">
-          <text class="text-lg font-bold text-gray-900">{{ item.cTitle }}</text>
+          <text class="text-lg font-bold text-gray-900">{{ item.cTitle ?? '' }}</text>
           <view class="absolute bottom-0 left-0 right-0 h-[8rpx] rounded-full bg-[#0078d7]" />
         </view>
       </view>
 
-      <text class="text-xs mb-2">{{ item.cDescription }}</text>
+      <text class="text-xs mb-2">{{ item.cDescription ?? '' }}</text>
       <image
         :src="item.cImgUrl"
         class="w-full"

@@ -11,16 +11,16 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/case/detail/index",
-          "pathName": "pages/case/detail/index",
-          "query": "id=5c410656-a223-47c0-b54c-a2f71f92c077",
+          "name": "pages/product/detail/index",
+          "pathName": "pages/product/detail/index",
+          "query": "id=985c5afb-967e-4393-8849-33245d0a9033&userId=5ef63c62-96cb-4ce5-840f-fcd3b7406f3b",
           "scene": null,
           "launchMode": "default"
         },
         {
           "name": "pages/index/index",
           "pathName": "pages/index/index",
-          "query": "id=b5669b15-da1c-477c-8f9c-c048a3ce3f6a",
+          "query": "id=5ef63c62-96cb-4ce5-840f-fcd3b7406f3b",
           "launchMode": "default",
           "scene": null
         },

@@ -55,14 +55,14 @@ const onVisibleChange = (e: { visible: boolean }) => {
       <view class="flex flex-col items-start ml-2">
         <view>
           <text class="text-sm">
-            {{ detail.cEmployeeName }}
+            {{ detail.cEmployeeName ?? '' }}
           </text>
           <text class="ml-1 text-xs text-[#999999]">
-            {{ detail.cPost }}
+            {{ detail.cPost ?? '' }}
           </text>
         </view>
         <text class="text-xs text-[#999999]">
-          {{ detail.cCompanyName }}
+          {{ detail.cCompanyName ?? '' }}
         </text>
       </view>
     </view>

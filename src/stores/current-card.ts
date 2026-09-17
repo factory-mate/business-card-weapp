@@ -9,7 +9,6 @@ export const useCurrentCardStore = defineStore('current-card', () => {
   const isLoading = ref(false)
 
   async function getDetail(id: string) {
-    detail.value = {}
     isLoading.value = true
     wx.showLoading({ title: '正在加载数据' })
     try {

@@ -64,7 +64,7 @@ onShareAppMessage((res) => {
               class="h-[40rpx] w-[40rpx]"
               :src="item.cLogoUrl"
             />
-            <text class="text-sm ml-1">{{ item.cCompanyName }}</text>
+            <text class="text-sm ml-1">{{ item.cCompanyName ?? '' }}</text>
           </view>
         </view>
         <view class="absolute right-[20rpx] top-[20rpx]">
@@ -93,10 +93,10 @@ onShareAppMessage((res) => {
           />
           <view class="flex flex-col ml-2">
             <view>
-              <text class="font-semibold">{{ item.cEmployeeName }}</text>
-              <text class="text-[#999999] text-xs ml-1">{{ item.cPost }}</text>
+              <text class="font-semibold">{{ item.cEmployeeName ?? '' }}</text>
+              <text class="text-[#999999] text-xs ml-1">{{ item.cPost ?? '' }}</text>
             </view>
-            <text class="text-xs">{{ item.cPhone }}</text>
+            <text class="text-xs">{{ item.cPhone ?? '' }}</text>
           </view>
         </view>
       </view>

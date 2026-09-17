@@ -1,13 +1,15 @@
 import type { FileVo } from './file'
 import type { FullPageDto } from './page'
+import type { ProductTagVo } from './product-tag'
 import { API_DOMAIN_PREFIX, request } from './request'
+
 const API_PREFIX = '/api/fm_product'
 
 export const ProductAPI = {
-  list: (data: FullPageDto) =>
+  list: (data: ProductListDto) =>
     request<ProductVo[]>({
       url: `${API_DOMAIN_PREFIX}${API_PREFIX}/GetForList`,
-      method: 'GET',
+      method: 'POST',
       data
     }),
   detail: (val: string) =>
@@ -22,6 +24,7 @@ export const ProductAPI = {
 
 export interface ProductVo {
   list_file: FileVo[]
+  list_lable: ProductTagVo[]
   cCompanyCode: string
   cTitle: string
   cProfile: string
@@ -39,4 +42,8 @@ export interface ProductVo {
   cModifyUserName: string
   dModifyTime: string
   utfs: string
+}
+
+export interface ProductListDto extends FullPageDto {
+  list_uid: string[]
 }

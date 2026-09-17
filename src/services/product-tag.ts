@@ -1,37 +1,26 @@
-import type { FileVo } from './file'
 import type { FullPageDto } from './page'
 import { API_DOMAIN_PREFIX, request } from './request'
 
-const API_PREFIX = '/api/fm_case'
+const API_PREFIX = '/api/fm_productlable'
 
-export const CaseAPI = {
+export const ProductTagAPI = {
   list: (data: FullPageDto) =>
-    request<CaseVo[]>({
+    request<ProductTagVo[]>({
       url: `${API_DOMAIN_PREFIX}${API_PREFIX}/GetForList`,
       method: 'GET',
       data
-    }),
-  detail: (val: string) =>
-    request<CaseVo>({
-      url: `${API_DOMAIN_PREFIX}${API_PREFIX}/GetById`,
-      method: 'GET',
-      data: {
-        val
-      }
     })
 }
 
-export interface CaseVo {
-  list_file: FileVo[]
-  cCompanyCode: string
-  cTitle: string
-  cDetail: string
-  cMemo: string
+export interface ProductTagVo {
+  cProductLable: string
+  cProductUID: string
+  cLableUID: string
   UID: string
   iStatus: number
   cSourceAppType: string
-  IsValid: boolean
-  IsDelete: boolean
+  IsValid: true
+  IsDelete: true
   cCreateUserCode: string
   cCreateUserName: string
   dCreateTime: string

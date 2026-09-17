@@ -7,7 +7,6 @@ export const useCaseListStore = defineStore('case-list', () => {
   const isLoading = ref(false)
 
   async function getList(params: FullPageDto) {
-    listData.value = []
     isLoading.value = true
     wx.showLoading({ title: '正在加载数据' })
     try {
