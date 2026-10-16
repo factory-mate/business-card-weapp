@@ -14,6 +14,8 @@ defineAppJson({
     'pages/product/detail/index',
     'pages/case/index',
     'pages/case/detail/index',
+    'pages/new/index',
+    'pages/new/detail/index',
     'pages/website/index',
     'pages/my/index',
     'pages/my/privacy/index',
@@ -33,6 +35,7 @@ defineAppJson({
   style: 'v2',
   sitemapLocation: 'sitemap.json',
   tabBar: {
+    custom: true,
     color: '#595959',
     selectedColor: '#0078d7',
     backgroundColor: '#ffffff',
@@ -61,6 +64,12 @@ defineAppJson({
         text: '官网',
         iconPath: 'assets/tabbar/LucidePaperclip.png',
         selectedIconPath: 'assets/tabbar/LucidePaperclip_Selected.png'
+      },
+      {
+        pagePath: 'pages/new/index',
+        text: '新闻',
+        iconPath: 'assets/tabbar/LucideNewspaper.png',
+        selectedIconPath: 'assets/tabbar/LucideNewspaper_Selected.png'
       },
       {
         pagePath: 'pages/my/index',

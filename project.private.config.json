@@ -2,7 +2,7 @@
   "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
   "projectname": "weapp-vite-wevu-tailwindcss-tdesign-template",
   "setting": {
-    "compileHotReLoad": true,
+    "compileHotReLoad": false,
     "skylineRenderEnable": false,
     "urlCheck": false,
     "bigPackageSizeSupport": true
@@ -11,16 +11,23 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/product/detail/index",
-          "pathName": "pages/product/detail/index",
-          "query": "id=985c5afb-967e-4393-8849-33245d0a9033&userId=5ef63c62-96cb-4ce5-840f-fcd3b7406f3b",
+          "name": "pages/website/index",
+          "pathName": "pages/website/index",
+          "query": "",
           "scene": null,
           "launchMode": "default"
         },
         {
           "name": "pages/index/index",
           "pathName": "pages/index/index",
-          "query": "id=5ef63c62-96cb-4ce5-840f-fcd3b7406f3b",
+          "query": "id=5ef63c62-96cb-4ce5-840f-fcd3b7406f3b&lang=EN",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/product/detail/index",
+          "pathName": "pages/product/detail/index",
+          "query": "id=985c5afb-967e-4393-8849-33245d0a9033&userId=7c692b5d-a560-4ff9-abce-be280df2b3f5",
           "launchMode": "default",
           "scene": null
         },

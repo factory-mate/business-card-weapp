@@ -50,6 +50,7 @@ export interface UserVo {
   cWebsiteUrl: string
   list_s: HomePageItemVo[]
   utfs: string
+  tabbar: string
 }
 
 interface HomePageItemVo {

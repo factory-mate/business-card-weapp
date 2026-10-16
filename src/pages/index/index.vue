@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useCardListStore, useCurrentCardStore } from '@/stores'
-import { onLoad, onShareAppMessage, onShow, storeToRefs } from 'wevu'
+import { onLoad, onShareAppMessage, onShow, ref, storeToRefs } from 'wevu'
+import UserCard from '@/components/user-card/index.vue'
 
 definePageJson({
   navigationBarTitleText: '名片'
@@ -9,6 +10,16 @@ definePageJson({
 const cardListStore = useCardListStore()
 const currentCardStore = useCurrentCardStore()
 const { detail } = storeToRefs(currentCardStore)
+
+const lang = ref('CN')
+
+const handleToggleLang = () => {
+  if (lang.value === 'CN') {
+    lang.value = 'EN'
+  } else {
+    lang.value = 'CN'
+  }
+}
 
 const saveContact = () =>
   wx.addPhoneContact({
@@ -71,7 +82,7 @@ onShareAppMessage((res) => {
     const { UID, cEmployeeName } = res.target.dataset.custom
     return {
       title: cEmployeeName ? `${cEmployeeName}的名片` : '名片分享',
-      path: `/pages/index/index?id=${UID || ''}`
+      path: `/pages/index/index?id=${UID || ''}&lang=${lang.value}`
     }
   }
 
@@ -81,7 +92,7 @@ onShareAppMessage((res) => {
 
   return {
     title: currentName ? `${currentName}的名片` : '名片分享',
-    path: `/pages/index/index?id=${currentCardStore.currentId.value}`
+    path: `/pages/index/index?id=${currentCardStore.currentId.value}&lang=${lang.value}`
   }
 })
 
@@ -89,6 +100,9 @@ onLoad((query) => {
   if (query?.id) {
     currentCardStore.setCurrentId(query.id)
     cardListStore.addCardItem(query.id)
+  }
+  if (query?.lang && (query.lang === 'EN' || query.lang === 'CN')) {
+    lang.value = query?.lang
   }
 })
 
@@ -106,7 +120,11 @@ onShow(async () => {
 
 <template>
   <view class="min-h-screen bg-[#f6f7fb] p-[32rpx]">
-    <user-card :detail="detail" />
+    <user-card
+      :lang="lang"
+      @toggle="handleToggleLang"
+      :detail="detail"
+    />
 
     <view
       class="mt-2 bg-white rounded-[14rpx] bg-cover bg-center bg-no-repeat p-[28rpx] shadow-[0_18rpx_40rpx_rgba(17,24,39,0.08)]"
