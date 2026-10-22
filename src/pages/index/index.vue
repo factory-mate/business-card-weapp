@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useCardListStore, useCurrentCardStore } from '@/stores'
-import { onLoad, onShareAppMessage, onShow, ref, storeToRefs } from 'wevu'
+import { computed, onLoad, onShareAppMessage, onShow, ref, storeToRefs } from 'wevu'
 import UserCard from '@/components/user-card/index.vue'
 
 definePageJson({
@@ -12,6 +12,12 @@ const currentCardStore = useCurrentCardStore()
 const { detail } = storeToRefs(currentCardStore)
 
 const lang = ref('CN')
+
+const sortedList = computed(() => {
+  const list = detail.value?.list_s
+  if (!Array.isArray(list)) return []
+  return [...list].sort((a, b) => (a.iIndex ?? 0) - (b.iIndex ?? 0))
+})
 
 const handleToggleLang = () => {
   if (lang.value === 'CN') {
@@ -154,7 +160,10 @@ onShow(async () => {
 </script>
 
 <template>
-  <view class="min-h-screen bg-[#f6f7fb] p-[32rpx]">
+  <view
+    class="min-h-screen bg-[#f6f7fb] p-[32rpx] overflow-hidden"
+    style="padding-bottom: calc(132rpx + env(safe-area-inset-bottom))"
+  >
     <user-card
       :lang="lang"
       @toggle="handleToggleLang"
@@ -219,7 +228,7 @@ onShow(async () => {
     </view>
 
     <view
-      v-for="(item, index) in detail.list_s"
+      v-for="(item, index) in sortedList"
       :key="index"
       class="mt-4 flex flex-wrap"
     >
@@ -229,8 +238,10 @@ onShow(async () => {
           <view class="absolute bottom-0 left-0 right-0 h-[8rpx] rounded-full bg-[#0078d7]" />
         </view>
       </view>
-
-      <text class="text-xs mb-2">{{ item.cDescription ?? '' }}</text>
+      <rich-text
+        class="text-xs mb-2 w-full"
+        :nodes="item.cDescription ?? ''"
+      />
       <image
         :src="item.cImgUrl"
         class="w-full"
