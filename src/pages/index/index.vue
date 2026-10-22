@@ -48,20 +48,55 @@ const makeCall = () => {
 }
 
 const copyWeChat = () => {
-  if (!detail.value.cWeName) {
-    wx.showToast({ title: '暂未提供联系微信号', icon: 'error' })
+  const hasWeName = !!detail.value.cWeName
+  const hasQRCode = !!detail.value.cQRCodeUrl
+  if (!hasWeName && !hasQRCode) {
+    wx.showToast({ title: '暂未提供联系微信号或微信二维码', icon: 'error' })
     return
   }
-  wx.setClipboardData({
-    data: detail.value.cWeName,
-    success: () => {
-      wx.showModal({
-        title: '微信号已复制',
-        content: `已成功复制微信号: ${detail.value?.cWeName}\n请在微信搜索框中粘贴并添加好友`,
-        showCancel: false
-      })
-    }
-  })
+  if (hasWeName && hasQRCode) {
+    wx.setClipboardData({
+      data: detail.value.cWeName!,
+      success: () => {
+        wx.showModal({
+          title: '微信号已复制',
+          content: `已成功复制微信号: ${detail.value.cWeName}\n即将为您打开微信二维码`,
+          showCancel: false,
+          success: (res) => {
+            if (res.confirm) {
+              wx.previewImage({
+                current: detail.value.cQRCodeUrl,
+                urls: [detail.value.cQRCodeUrl!]
+              })
+            }
+          }
+        })
+      }
+    })
+    return
+  }
+
+  if (hasWeName) {
+    wx.setClipboardData({
+      data: detail.value.cWeName!,
+      success: () => {
+        wx.showModal({
+          title: '微信号已复制',
+          content: `已成功复制微信号: ${detail.value.cWeName}\n请在微信搜索框中粘贴并添加好友`,
+          showCancel: false
+        })
+      }
+    })
+    return
+  }
+
+  if (hasQRCode) {
+    wx.previewImage({
+      current: detail.value.cQRCodeUrl,
+      urls: [detail.value.cQRCodeUrl!]
+    })
+    return
+  }
 }
 
 const openMap = () => {

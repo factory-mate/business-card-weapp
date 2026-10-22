@@ -51,6 +51,7 @@ export interface UserVo {
   list_s: HomePageItemVo[]
   utfs: string
   tabbar: string
+  cQRCodeUrl: string
 }
 
 interface HomePageItemVo {
