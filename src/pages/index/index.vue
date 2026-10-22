@@ -223,7 +223,7 @@ onShow(async () => {
       :key="index"
       class="mt-4 flex flex-wrap"
     >
-      <view class="flex justify-center mb-2 w-full">
+      <view class="flex mb-2 w-full">
         <view class="relative inline-block pb-[8rpx] text-center">
           <text class="text-lg font-bold text-gray-900">{{ item.cTitle ?? '' }}</text>
           <view class="absolute bottom-0 left-0 right-0 h-[8rpx] rounded-full bg-[#0078d7]" />
