@@ -2,6 +2,7 @@
 import { useCardListStore, useCurrentCardStore } from '@/stores'
 import { computed, onLoad, onShareAppMessage, onShow, ref, storeToRefs } from 'wevu'
 import UserCard from '@/components/user-card/index.vue'
+import { UserAPI } from '@/services'
 
 definePageJson({
   navigationBarTitleText: '名片'
@@ -137,13 +138,55 @@ onShareAppMessage((res) => {
   }
 })
 
-onLoad((query) => {
-  if (query?.id) {
-    currentCardStore.setCurrentId(query.id)
-    cardListStore.addCardItem(query.id)
-  }
-  if (query?.lang && (query.lang === 'EN' || query.lang === 'CN')) {
-    lang.value = query?.lang
+onLoad(async (query) => {
+  if (query?.scene) {
+    try {
+      wx.showLoading({ title: '加载中...' })
+      const paramString = (await UserAPI.shareUrl(query.scene)).data.at(0)?.cKey
+      if (!paramString) {
+        throw new Error()
+      }
+
+      const params = {
+        id: '',
+        lang: ''
+      }
+
+      paramString.split('&').forEach((item) => {
+        const splitIndex = item.indexOf('=')
+        if (splitIndex !== -1) {
+          const key = item.substring(0, splitIndex)
+          const value = item.substring(splitIndex + 1)
+          if (key === 'id' || key === 'lang') {
+            params[key] = decodeURIComponent(value)
+          }
+        }
+      })
+
+      const targetId = params.id
+      const targetLang = params.lang
+
+      if (targetId) {
+        currentCardStore.setCurrentId(targetId)
+        cardListStore.addCardItem(targetId)
+      }
+      if (targetLang) {
+        lang.value = targetLang
+      }
+    } catch (error) {
+      console.error('解析名片码失败:', error)
+      wx.showToast({ title: '二维码无效', icon: 'none' })
+    } finally {
+      wx.hideLoading()
+    }
+  } else {
+    if (query?.id) {
+      currentCardStore.setCurrentId(query.id)
+      cardListStore.addCardItem(query.id)
+    }
+    if (query?.lang && (query.lang === 'EN' || query.lang === 'CN')) {
+      lang.value = query?.lang
+    }
   }
 })
 

@@ -10,6 +10,14 @@ export const UserAPI = {
       data: {
         val
       }
+    }),
+  shareUrl: (code: string) =>
+    request<ShareUrlVo[]>({
+      url: `${API_DOMAIN_PREFIX}${API_PREFIX}/GetQRCode`,
+      method: 'GET',
+      data: {
+        conditions: `id = ${code}`
+      }
     })
 }
 
@@ -60,4 +68,10 @@ interface HomePageItemVo {
   cImgUrl: string
   iIndex: number
   IsValid: boolean
+}
+
+export interface ShareUrlVo {
+  id: number
+  cKey: string
+  cPage: string
 }

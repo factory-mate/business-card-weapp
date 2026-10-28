@@ -11,16 +11,16 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/website/index",
-          "pathName": "pages/website/index",
+          "name": "pages/index/index",
+          "pathName": "pages/index/index",
           "query": "",
           "scene": null,
           "launchMode": "default"
         },
         {
-          "name": "pages/index/index",
-          "pathName": "pages/index/index",
-          "query": "id=5ef63c62-96cb-4ce5-840f-fcd3b7406f3b&lang=EN",
+          "name": "pages/website/index",
+          "pathName": "pages/website/index",
+          "query": "",
           "launchMode": "default",
           "scene": null
         },
