@@ -67,13 +67,15 @@ const onTapItem = () => emit('toggle')
       backgroundImage: `url(${detail.cBgUrl})`
     }"
     class="relative overflow-hidden rounded-[14rpx] flex flex-col justify-between h-[450rpx] w-full bg-cover bg-center bg-no-repeat p-[28rpx] shadow-[0_18rpx_40rpx_rgba(17,24,39,0.08)]"
-    @tap="onTapItem"
   >
     <view
       class="pointer-events-none absolute right-0 top-0 z-10 flex items-end justify-end bg-[#0078d7] shadow-md"
       style="width: 80rpx; height: 80rpx; clip-path: polygon(100% 0, 100% 100%, 0 0)"
     />
-    <view class="absolute right-1 top-1 z-20 text-xs font-bold uppercase text-white">
+    <view
+      class="absolute right-1 top-1 z-20 text-xs font-bold uppercase text-white"
+      @tap="onTapItem"
+    >
       {{ lang }}
     </view>
     <template v-if="lang === 'CN'">
